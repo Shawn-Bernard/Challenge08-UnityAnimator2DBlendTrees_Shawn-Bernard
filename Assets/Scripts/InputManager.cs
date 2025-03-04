@@ -34,10 +34,28 @@ public class InputManager : MonoBehaviour, PlayerInput.IPlayerActions
         }
         
     }
+
+    public void OnSprint(InputAction.CallbackContext context)
+    {
+        //This will mean the button is held down
+        if (context.started)
+        {
+            //This will increase my player speed when button is held
+            PlayerInputActions.SprintEvent?.Invoke();
+        }
+        //This means the button was lifted
+        else if (context.canceled)
+        {
+            //Since the player speed would be greater than 3 this will take away by amount set
+            PlayerInputActions.SprintEvent?.Invoke();
+        }
+    }
 }
 public static class PlayerInputActions
 {
     public static Action<Vector2> MoveEvent;
+
+    public static Action SprintEvent;
 
     public static Action InteractEvent;
 

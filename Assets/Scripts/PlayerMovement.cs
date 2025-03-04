@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -11,7 +12,8 @@ public class PlayerMovement : MonoBehaviour
 
     Vector2 lastPlayerVector;
     //Speed so we can go fast
-    public float Speed = 2.0f;
+    private float Speed = 3.0f;
+    private float Amount = 2.0f;
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -20,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
 
         //adding my update move vector mwthod to my MoveEvent action
         PlayerInputActions.MoveEvent += UpdateMoveVector;
+        PlayerInputActions.SprintEvent += Sprint;
     }
 
     // Update is called once per frame
@@ -67,9 +70,23 @@ public class PlayerMovement : MonoBehaviour
         animator.SetFloat("Y", playerVector.y);
         animator.SetBool("Moving", Bool);
     }
+    void Sprint()
+    {
+        if (Speed > 3f)
+        {
+            Speed -= Amount;
+        }
+        else
+        {
+            Speed += Amount;
+        }
+        animator.SetFloat("Speed", Speed);
+    }
     private void OnDisable()
     {
         //Unsubscribing my MoveEvent from UpdateMoveVector
         PlayerInputActions.MoveEvent -= UpdateMoveVector;
+
+        PlayerInputActions.SprintEvent -= Sprint;
     }
 }
